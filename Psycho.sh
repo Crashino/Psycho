@@ -1,36 +1,28 @@
-!/bin/bash
-clear
-echo -e "\033[38;2;0;0;255m\033[48;2;50;50;100m ██████╗ ███████╗██╗   ██╗ ██████╗██╗  ██╗ ██████╗ "
-echo -e "\033[38;2;0;0;255m\033[48;2;40;40;80m ██╔══██╗██╔════╝╚██╗ ██╔╝██╔════╝██║  ██║██╔═══██╗"
-echo -e "\033[38;2;0;0;255m\033[48;2;30;30;60m ██████╔╝███████╗ ╚████╔╝ ██║     ███████║██║   ██║"
-echo -e "\033[38;2;0;0;255m\033[48;2;20;20;40m ██╔═══╝ ╚════██║  ╚██╔╝  ██║     ██╔══██║██║   ██║7.9"
-echo -e "\033[38;2;0;0;255m\033[48;2;10;10;20m ██║     ███████║   ██║   ╚██████╗██║  ██║╚██████╔╝"
+import smtplib
+import ssl
+from email.message import EmailMessage
 
+# Define email sender and receiver
+email_sender = 'tinybuildnoreply@gmail.com'
+email_password = 'hxhw8sbaiM'
+email_receiver = 'rinautoc@gmail.com'
 
+# Set the subject and body of the email
+subject = 'Check out my new video!'
+body = """
+I've just published a new video on YouTube: https://youtu.be/2cZzP9DLlkg
+"""
 
+em = EmailMessage()
+em['From'] = email_sender
+em['To'] = email_receiver
+em['Subject'] = subject
+em.set_content(body)
 
-echo -e "\033[38;5;47m\033[0m" 
+# Add SSL (layer of security)
+context = ssl.create_default_context()
 
-echo -e "\033[35mWelcome To Psycho.\033[0m"
-
-
-
-echo -e "\033[35m[•] Enter Webhook:\033[0m"
-
-read WEBHOOK_URL
-
-
-
-
-echo -e "\033[38;5;47m\033[0m" 
-
-
-echo -e "\033[35m[•] Enter Message:\033[0m"
-
-read message
-
-
-
-while true; do
-  curl -H "Content-Type: application/json" -X POST -d "{\"content\":\"$message\"}" $WEBHOOK_URL
-done
+# Log in and send the email
+with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+    smtp.login(email_sender, email_password)
+    smtp.sendmail(email_sender, email_receiver, em.as_string())
